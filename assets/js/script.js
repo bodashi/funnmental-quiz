@@ -6,7 +6,7 @@ var timerCount = 60;
 var beginQuiz = function () {
   
   var timerCountdown = function () {
-    console.log(timerCount);
+    quizTimer.innerHTML = timerCount;
     
     if (timerCount === 0) {
       alert("Time's Up!!");

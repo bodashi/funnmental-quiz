@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./assets/css/style.css">
     <title>Fun'N'Mental JS Quiz</title>
   </head>
   <body>
@@ -11,17 +12,31 @@
       <a href="#highscore">View HighScores</a>
       <span>Time Remaining: <span id="quizTimer"></span></span>
     </header>
-    <main id="question-wrapper">
+    <main>
       <section id="welcome">
         <h1>Fun'N'Mental</h1>
         <p>JavaScript Quiz</p>
         <p>
           Challenge yourself in the fundamentals of JavaScript with this quiz!
         </p>
-        <p>Answer questions correctly and earn 10 points for every correct answer.</p>
+        <p>
+          Answer questions correctly and earn 10 points for every correct
+          answer.
+        </p>
         <p>Get a question wrong and lose 10 seconds of precious time...</p>
         <p>You have 1 whole minute. GOOD LUCK! 🍀</p>
-        <button id="start-quiz" type="submit">Let's Go!!!</button>
+        <button id="start-quiz">Let's Go!!!</button>
+      </section>
+      <section id="quiz">
+        <article id="question">
+          <h2 id="question-title"></h2>
+          <div id="answer-wrapper">
+            <input id="choice-one" type="button">
+            <input id="choice-two" type="button">
+            <input id="choice-three" type="button">
+            <input id="choice-four" type="button">
+          </div>
+        </article>
       </section>
     </main>
     <script src="./assets/js/script.js"></script>

@@ -1,32 +1,44 @@
+// initialize html elements
 var startQuiz = document.querySelector("#start-quiz");
 var startTimer = document.querySelector("#quizTimer");
 var welcomeEl = document.querySelector("#welcome");
-var questionEl = document.querySelector("#question-wrapper");
+var quizEl = document.querySelector("#quiz");
+var questionTitleEl = document.querySelector("#question-title");
+var choiceOneEl = document.querySelector("#choice-one");
+var choiceTwoEl = document.querySelector("#choice-two");
+var choiceThreeEl = document.querySelector("#choice-three");
+var choiceFourEl = document.querySelector("#choice-four");
 
-var timerCount = 5;
+// set timerCount for one minute
+var timerCount = 60;
+var correctAnswerArr = [];
+var questionsIndex = 0;
+var result = "";
+var score = 0;
 
+// array of JS questions
 var quizQuestions = [
   {
     question: "Which of these does not declare a variable?",
-    answers: ["let", "const", "var", "//"],
+    answerChoices: ["let", "const", "var", "//"],
     correctAnswer: "//",
   },
   {
     question: "JavaScript is a(n) ______ language.",
-    answers: ["Object-Oriented", "Functional", "Coffee", "Java"],
+    answerChoices: ["Object-Oriented", "Functional", "Coffee", "Java"],
     correctAnswer: "Object-Oriented",
   },
   {
     question:
       "When an operator's value is NULL, the typeof returned by the unary operator is:",
-    answers: ["Boolean", "Undefined", "Object", "Integer"],
+    answerChoices: ["Boolean", "Undefined", "Object", "Integer"],
     correctAnswer: "Object",
   },
   {
     question: 'What does the Javascript "debugger" statement do?',
-    answers: [
-      "It will debug all the errors in the program at runtime",
-      "It acts as a breakpoint in a program",
+    answerChoices: [
+      "It will debug all the errors in the program at runtime.",
+      "It acts as a breakpoint in a program.",
       "It will debug error in the current statement if any.",
       "All of the above.",
     ],
@@ -34,62 +46,103 @@ var quizQuestions = [
   },
 ];
 
-var beginQuiz = function () {
+// start game loop
+const gameLoop = function () {
   welcomeEl.remove();
-
-  var timerCountdown = function () {
-    startTimer.textContent = timerCount;
-
-    if (timerCount === 0) {
-      clearInterval(startCountdown);
-      startTimer.textContent = "Time's Up!!";
-    }
-    timerCount--;
-  };
-
-  var displayQuestion = function () {
-    // create element question wrapper
-    var questionWrapper = document.createElement("section");
-    var questionTitle = document.createElement("h2");
-    var questionAnswersWrapper = document.createElement("div");
-
-    var questionAnswersContainerOne = document.createElement("div");
-    var questionAnswersContainerTwo = document.createElement("div");
-    var questionAnswersContainerThree = document.createElement("div");
-    var questionAnswersContainerFour = document.createElement("div");
-
-    var questionAnswerOne = document.createElement("button");
-    var questionAnswerTwo = document.createElement("button");
-    var questionAnswerThree = document.createElement("button");
-    var questionAnswerFour = document.createElement("button");
-
-    questionWrapper.appendChild(questionTitle);
-    questionWrapper.appendChild(questionAnswersWrapper);
-
-    questionAnswersWrapper.appendChild(questionAnswersContainerOne);
-    questionAnswersWrapper.appendChild(questionAnswersContainerTwo);
-    questionAnswersWrapper.appendChild(questionAnswersContainerThree);
-    questionAnswersWrapper.appendChild(questionAnswersContainerFour);
-
-    questionAnswersContainerOne.appendChild(questionAnswerOne);
-    questionAnswersContainerTwo.appendChild(questionAnswerTwo);
-    questionAnswersContainerThree.appendChild(questionAnswerThree);
-    questionAnswersContainerFour.appendChild(questionAnswerFour);
-
-    questionEl.append(questionWrapper);
-
-
-
-    for (var i = 0; i < quizQuestions.length; i++) {
-      questionTitle.textContent = quizQuestions[i].question;
-      questionAnswerOne.textContent = quizQuestions[i].answers[0];
-      questionAnswerTwo.textContent = quizQuestions[i].answers[1];
-      questionAnswerThree.textContent = quizQuestions[i].answers[2];
-      questionAnswerFour.textContent = quizQuestions[i].answers[3];
-    }
-  };
-  var startCountdown = setInterval(timerCountdown, 1000);
-  displayQuestion();
+  quizEl.style.display = "block";
+  buildQuestionTemplate(questionsIndex);
 };
 
-startQuiz.addEventListener("click", beginQuiz);
+const buildQuestionTemplate = function (questionsIndex) {
+  let index = questionsIndex;
+  let choiceOne, choiceTwo, choiceThree, choiceFour;
+  questionTitleEl.textContent = quizQuestions[index].question;
+
+  for (let i = 0; i < quizQuestions[index].answerChoices.length; i++) {
+    let choice = quizQuestions[index].answerChoices[i];
+    switch (i) {
+      case 0:
+        choiceOne = choice;
+        break;
+      case 1:
+        choiceTwo = choice;
+        break;
+      case 2:
+        choiceThree = choice;
+        break;
+      case 3:
+        choiceFour = choice;
+        break;
+      default:
+        break;
+    }
+  }
+  choiceOneEl.value = choiceOne;
+  choiceTwoEl.value = choiceTwo;
+  choiceThreeEl.value = choiceThree;
+  choiceFourEl.value = choiceFour;
+};
+
+const checkAnswer = function (event) {
+  let answerChoice = event.target.value;
+  let result;
+  let index = questionsIndex;
+
+  if (answerChoice === quizQuestions[index].correctAnswer) {
+    result = true;
+  } else {
+    result = false;
+  }
+
+  if (result === false) {
+    alert("Wrong");
+  } else {
+    alert("correct!!");
+  }
+
+  questionsIndex++;
+  buildQuestionTemplate(questionsIndex);
+};
+
+startQuiz.addEventListener("click", gameLoop);
+choiceOneEl.addEventListener("click", checkAnswer);
+choiceTwoEl.addEventListener("click", checkAnswer);
+choiceThreeEl.addEventListener("click", checkAnswer);
+choiceFourEl.addEventListener("click", checkAnswer);
+
+// // decrements timerCount by the second until time is up
+// var timerCountdown = function () {
+//   startTimer.textContent = timerCount;
+
+//   // remove welcome message/instructions
+
+//   if (timerCount === 0) {
+//     clearInterval(startCountdown);
+//     startTimer.textContent = "Time's Up!!";
+//   }
+//   timerCount--;
+// };
+
+
+// var getAnswer = function (choice) {
+//   var chosenAnswer = choice;
+//   var index = questionsIndex;
+//   var answer = quizQuestions[index].correctAnswer;
+//   console.log(chosenAnswer);
+//   console.log(answer);
+//   if (chosenAnswer === "") {
+//     return;
+//   } else if (chosenAnswer !== answer) {
+//     console.log("false");
+//   } else {
+//     console.log("true");
+//   }
+
+// };
+
+
+
+// var timePenalty = function () {
+//   timerCountdown -= 10;
+// };
+

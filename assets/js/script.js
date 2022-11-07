@@ -48,6 +48,7 @@ var quizQuestions = [
 
 // start game loop
 const gameLoop = function () {
+  setInterval(timerCountdown, 1000);
   welcomeEl.remove();
   quizEl.style.display = "block";
   buildQuestionTemplate(questionsIndex);
@@ -82,6 +83,10 @@ const buildQuestionTemplate = function (questionsIndex) {
   choiceThreeEl.value = choiceThree;
   choiceFourEl.value = choiceFour;
 };
+var timePenalty = function () {
+  timerCount -= 10;
+};
+
 
 const checkAnswer = function (event) {
   let answerChoice = event.target.value;
@@ -95,6 +100,7 @@ const checkAnswer = function (event) {
   }
 
   if (result === false) {
+    timePenalty();
     alert("Wrong");
   } else {
     alert("correct!!");
@@ -110,19 +116,18 @@ choiceTwoEl.addEventListener("click", checkAnswer);
 choiceThreeEl.addEventListener("click", checkAnswer);
 choiceFourEl.addEventListener("click", checkAnswer);
 
-// // decrements timerCount by the second until time is up
-// var timerCountdown = function () {
-//   startTimer.textContent = timerCount;
+// decrements timerCount by the second until time is up
+var timerCountdown = function () {
+  startTimer.textContent = timerCount;
 
-//   // remove welcome message/instructions
+  // remove welcome message/instructions
 
-//   if (timerCount === 0) {
-//     clearInterval(startCountdown);
-//     startTimer.textContent = "Time's Up!!";
-//   }
-//   timerCount--;
-// };
-
+  if (timerCount === 0) {
+    clearInterval(startCountdown);
+    startTimer.textContent = "Time's Up!!";
+  }
+  timerCount--;
+};
 
 // var getAnswer = function (choice) {
 //   var chosenAnswer = choice;
@@ -138,11 +143,5 @@ choiceFourEl.addEventListener("click", checkAnswer);
 //     console.log("true");
 //   }
 
-// };
-
-
-
-// var timePenalty = function () {
-//   timerCountdown -= 10;
 // };
 

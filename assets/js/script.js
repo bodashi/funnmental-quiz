@@ -11,7 +11,6 @@ var choiceFourEl = document.querySelector("#choice-four");
 
 // set timerCount for one minute
 var timerCount = 60;
-var correctAnswerArr = [];
 var questionsIndex = 0;
 var result = "";
 var score = 0;
@@ -54,6 +53,16 @@ const gameLoop = function () {
   buildQuestionTemplate(questionsIndex);
 };
 
+// decrements timerCount by the second until time is up
+var timerCountdown = function () {
+  startTimer.textContent = timerCount;
+  if (timerCount === 0) {
+    clearInterval(startCountdown);
+    startTimer.textContent = "Time's Up!!";
+  }
+  timerCount--;
+};
+
 const buildQuestionTemplate = function (questionsIndex) {
   let index = questionsIndex;
   let choiceOne, choiceTwo, choiceThree, choiceFour;
@@ -83,17 +92,34 @@ const buildQuestionTemplate = function (questionsIndex) {
   choiceThreeEl.value = choiceThree;
   choiceFourEl.value = choiceFour;
 };
+
+var correctAward = function () {
+  score += 10;
+};
+
 var timePenalty = function () {
   timerCount -= 10;
 };
 
-
 const checkAnswer = function (event) {
   let answerChoice = event.target.value;
+  checkResult(answerChoice);
+};
+
+const nextQuestion = function () {
+  if (questionsIndex >= quizQuestions.length) {
+    console.log("done!");
+  } else {
+    buildQuestionTemplate(questionsIndex);
+  }
+};
+
+const checkResult = function (answerChoice) {
+  let choice = answerChoice;
   let result;
   let index = questionsIndex;
 
-  if (answerChoice === quizQuestions[index].correctAnswer) {
+  if (choice === quizQuestions[index].correctAnswer) {
     result = true;
   } else {
     result = false;
@@ -103,11 +129,12 @@ const checkAnswer = function (event) {
     timePenalty();
     alert("Wrong");
   } else {
+    correctAward();
     alert("correct!!");
+    console.log(score);
   }
-
   questionsIndex++;
-  buildQuestionTemplate(questionsIndex);
+  nextQuestion();
 };
 
 startQuiz.addEventListener("click", gameLoop);
@@ -115,33 +142,3 @@ choiceOneEl.addEventListener("click", checkAnswer);
 choiceTwoEl.addEventListener("click", checkAnswer);
 choiceThreeEl.addEventListener("click", checkAnswer);
 choiceFourEl.addEventListener("click", checkAnswer);
-
-// decrements timerCount by the second until time is up
-var timerCountdown = function () {
-  startTimer.textContent = timerCount;
-
-  // remove welcome message/instructions
-
-  if (timerCount === 0) {
-    clearInterval(startCountdown);
-    startTimer.textContent = "Time's Up!!";
-  }
-  timerCount--;
-};
-
-// var getAnswer = function (choice) {
-//   var chosenAnswer = choice;
-//   var index = questionsIndex;
-//   var answer = quizQuestions[index].correctAnswer;
-//   console.log(chosenAnswer);
-//   console.log(answer);
-//   if (chosenAnswer === "") {
-//     return;
-//   } else if (chosenAnswer !== answer) {
-//     console.log("false");
-//   } else {
-//     console.log("true");
-//   }
-
-// };
-

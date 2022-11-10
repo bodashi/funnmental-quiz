@@ -1,3 +1,11 @@
 #quiz {
   display: none;
 }
+
+#end-game {
+  display: none;
+}
+
+#highscore {
+  display: none;
+}

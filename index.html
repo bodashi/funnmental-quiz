@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="./assets/css/style.css" />
     <title>Fun'N'Mental JS Quiz</title>
   </head>
   <body>
@@ -31,12 +31,23 @@
         <article id="question">
           <h2 id="question-title"></h2>
           <div id="answer-wrapper">
-            <input id="choice-one" type="button">
-            <input id="choice-two" type="button">
-            <input id="choice-three" type="button">
-            <input id="choice-four" type="button">
+            <input id="choice-one" type="button" />
+            <input id="choice-two" type="button" />
+            <input id="choice-three" type="button" />
+            <input id="choice-four" type="button" />
           </div>
         </article>
+      </section>
+      <section id="end-game">
+        <h3>Your Score is <span id="score"></span> !</h3>
+        <form id="submit-score">
+          <input type="text" id="initial" placeholder="Enter your initials" for="save-score" />
+
+          <button id="save-score" type="submit">Save</button>
+        </form>
+      </section>
+      <section id="highscore">
+        <h4>High Scores</h4>
       </section>
     </main>
     <script src="./assets/js/script.js"></script>

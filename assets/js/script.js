@@ -8,12 +8,19 @@ var choiceOneEl = document.querySelector("#choice-one");
 var choiceTwoEl = document.querySelector("#choice-two");
 var choiceThreeEl = document.querySelector("#choice-three");
 var choiceFourEl = document.querySelector("#choice-four");
+var endGameEl = document.querySelector("#end-game");
+var scoreEl = document.querySelector("#score");
+var initialsEl = document.querySelector("#initial");
+var submitScoreEl = document.querySelector("#submit-score");
+var highscoreEl = document.querySelector("#highscore");
 
-// set timerCount for one minute
+// initialize quiz variables
 var timerCount = 60;
 var questionsIndex = 0;
 var result = "";
 var score = 0;
+var timeLeft = 0;
+var highscores = [];
 
 // array of JS questions
 var quizQuestions = [
@@ -45,8 +52,8 @@ var quizQuestions = [
   },
 ];
 
-// start game loop
-const gameLoop = function () {
+// start quiz loop
+const startGame = function () {
   setInterval(timerCountdown, 1000);
   welcomeEl.remove();
   quizEl.style.display = "block";
@@ -59,10 +66,13 @@ var timerCountdown = function () {
   if (timerCount === 0) {
     clearInterval(startCountdown);
     startTimer.textContent = "Time's Up!!";
+  } else if (questionsIndex >= quizQuestions.length) {
+    startTimer.textContent = "Done!";
   }
   timerCount--;
 };
 
+// Give html elements the quiz array values
 const buildQuestionTemplate = function (questionsIndex) {
   let index = questionsIndex;
   let choiceOne, choiceTwo, choiceThree, choiceFour;
@@ -93,27 +103,71 @@ const buildQuestionTemplate = function (questionsIndex) {
   choiceFourEl.value = choiceFour;
 };
 
+// award ten points to player for correct answer
 var correctAward = function () {
   score += 10;
 };
 
+// deduct ten points for incorrect answer
 var timePenalty = function () {
   timerCount -= 10;
 };
 
+// pass player choice to checkResult
 const checkAnswer = function (event) {
   let answerChoice = event.target.value;
   checkResult(answerChoice);
 };
 
+// If there's no more questions stores time,  otherwise next quiz question
 const nextQuestion = function () {
   if (questionsIndex >= quizQuestions.length) {
-    console.log("done!");
+    timeLeft = timerCount;
+    console.log(timeLeft);
+    clearInterval(timeLeft);
+    startTimer.textContent = "Done!";
+    displayScore(timeLeft);
+
+
   } else {
     buildQuestionTemplate(questionsIndex);
   }
 };
 
+// Display highscore form and player score
+const displayScore = function (timeLeft) {
+  let timeBonus = timeLeft;
+  score += timeBonus;
+  scoreEl.textContent = score;
+  quizEl.style.display = "none";
+  endGameEl.style.display = "block";
+}
+
+// loads highscore localStorage and passes values
+const getHighscores = function () {
+  let savedHighscores = localStorage.getItem("highscore");
+  if (!savedHighscores) {
+    return false;
+  }
+
+  return savedHighscores = JSON.parse(savedHighscores);
+}
+
+// saves new player score in JSON to be stored in localStorage
+const saveScore = function () {
+  highscores = getHighscores();
+  let player = { playerInitial: initialsEl.value, finalScore: score }
+  highscores.push(player);
+  localStorage.setItem("highscore", JSON.stringify(highscoreArr));
+  highscorePage();
+}
+
+// grab highscore array and display in descending order.
+const highscorePage = function () {
+  highscoreEl.style.display = "block";
+}
+
+// validate player choice and notify player
 const checkResult = function (answerChoice) {
   let choice = answerChoice;
   let result;
@@ -137,8 +191,9 @@ const checkResult = function (answerChoice) {
   nextQuestion();
 };
 
-startQuiz.addEventListener("click", gameLoop);
+startQuiz.addEventListener("click", startGame);
 choiceOneEl.addEventListener("click", checkAnswer);
 choiceTwoEl.addEventListener("click", checkAnswer);
 choiceThreeEl.addEventListener("click", checkAnswer);
 choiceFourEl.addEventListener("click", checkAnswer);
+submitScoreEl.addEventListener("submit", saveScore);

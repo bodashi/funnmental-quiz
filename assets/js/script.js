@@ -144,21 +144,22 @@ const displayScore = function (timeLeft) {
 }
 
 // loads highscore localStorage and passes values
-const getHighscores = function () {
-  let savedHighscores = localStorage.getItem("highscore");
-  if (!savedHighscores) {
+const loadHighscores = function () {
+  highscores = localStorage.getItem("highscore");
+  if (!highscores) {
     return false;
   }
 
-  return savedHighscores = JSON.parse(savedHighscores);
+  highscores = JSON.parse(highscores);
+  return highscores;
 }
 
 // saves new player score in JSON to be stored in localStorage
 const saveScore = function () {
-  highscores = getHighscores();
+
   let player = { playerInitial: initialsEl.value, finalScore: score }
   highscores.push(player);
-  localStorage.setItem("highscore", JSON.stringify(highscoreArr));
+  localStorage.setItem("highscore", JSON.stringify(highscores));
   highscorePage();
 }
 
@@ -197,3 +198,5 @@ choiceTwoEl.addEventListener("click", checkAnswer);
 choiceThreeEl.addEventListener("click", checkAnswer);
 choiceFourEl.addEventListener("click", checkAnswer);
 submitScoreEl.addEventListener("submit", saveScore);
+
+loadHighscores();

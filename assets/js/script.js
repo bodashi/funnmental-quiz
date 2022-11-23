@@ -13,6 +13,7 @@ var scoreEl = document.querySelector("#score");
 var initialsEl = document.querySelector("#initial");
 var submitScoreEl = document.querySelector("#submit-score");
 var highscoreEl = document.querySelector("#highscore");
+var quizBannerEl = document.querySelector("#quiz-banner");
 
 // initialize quiz variables
 var timerCount = 60;
@@ -64,10 +65,11 @@ const startGame = function () {
 var timerCountdown = function () {
   startTimer.textContent = timerCount;
   if (timerCount === 0) {
-    clearInterval(startCountdown);
+    clearInterval(timerCountdown);
     startTimer.textContent = "Time's Up!!";
   } else if (questionsIndex >= quizQuestions.length) {
     startTimer.textContent = "Done!";
+    clearInterval(timerCountdown);
   }
   timerCount--;
 };
@@ -127,8 +129,6 @@ const nextQuestion = function () {
     clearInterval(timeLeft);
     startTimer.textContent = "Done!";
     displayScore(timeLeft);
-
-
   } else {
     buildQuestionTemplate(questionsIndex);
   }
@@ -141,32 +141,41 @@ const displayScore = function (timeLeft) {
   scoreEl.textContent = score;
   quizEl.style.display = "none";
   endGameEl.style.display = "block";
-}
+};
 
 // loads highscore localStorage and passes values
 const loadHighscores = function () {
   highscores = localStorage.getItem("highscore");
   if (!highscores) {
-    return false;
+    return (highscores = []);
   }
 
   highscores = JSON.parse(highscores);
   return highscores;
-}
+};
 
 // saves new player score in JSON to be stored in localStorage
-const saveScore = function () {
-
-  let player = { playerInitial: initialsEl.value, finalScore: score }
+const saveScore = function (event) {
+  event.preventDefault();
+  let player = { playerInitial: initialsEl.value, finalScore: score };
   highscores.push(player);
   localStorage.setItem("highscore", JSON.stringify(highscores));
+  endGameEl.style.display = "none";
+  quizBannerEl.style.display = "none";
   highscorePage();
-}
+};
 
 // grab highscore array and display in descending order.
 const highscorePage = function () {
   highscoreEl.style.display = "block";
-}
+  for (let i = 0; i < highscores.length; i++) {
+    let highscoreListItem = document.createElement("li");
+
+    highscoreListItem.textContent =
+      highscores[i].playerInitial + ": " + highscores[i].finalScore;
+    highscoreEl.appendChild(highscoreListItem);
+  }
+};
 
 // validate player choice and notify player
 const checkResult = function (answerChoice) {

@@ -14,6 +14,8 @@ var initialsEl = document.querySelector("#initial");
 var submitScoreEl = document.querySelector("#submit-score");
 var highscoreEl = document.querySelector("#highscore");
 var quizBannerEl = document.querySelector("#quiz-banner");
+var highscoreListEl = document.querySelector("#highscore-list");
+var homeBtnEl = document.querySelector('#home');
 
 // initialize quiz variables
 var timerCount = 60;
@@ -56,7 +58,7 @@ var quizQuestions = [
 // start quiz loop
 const startGame = function () {
   setInterval(timerCountdown, 1000);
-  welcomeEl.remove();
+  welcomeEl.style.display = "none";
   quizEl.style.display = "block";
   buildQuestionTemplate(questionsIndex);
 };
@@ -173,7 +175,7 @@ const highscorePage = function () {
 
     highscoreListItem.textContent =
       highscores[i].playerInitial + ": " + highscores[i].finalScore;
-    highscoreEl.appendChild(highscoreListItem);
+    highscoreListEl.appendChild(highscoreListItem);
   }
 };
 
@@ -207,5 +209,18 @@ choiceTwoEl.addEventListener("click", checkAnswer);
 choiceThreeEl.addEventListener("click", checkAnswer);
 choiceFourEl.addEventListener("click", checkAnswer);
 submitScoreEl.addEventListener("submit", saveScore);
+homeBtnEl.addEventListener("click", function () {
+  timerCount = 0;
+  questionsIndex = 0;
+  score = 0;
+  result = "";
+  timeLeft = 0;
+
+  clearInterval(timerCountdown);
+
+  highscoreEl.style.display = "none";
+  quizBannerEl.style.display = "block";
+  welcomeEl.style.display = "block";
+})
 
 loadHighscores();

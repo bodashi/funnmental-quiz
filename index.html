@@ -9,8 +9,7 @@
   </head>
   <body>
     <header id="quiz-banner">
-      <a href="#highscore">View HighScores</a>
-      <span>Time Remaining: <span id="quizTimer"></span></span>
+      <span id="timer">Time Remaining: <span id="quizTimer"></span></span>
     </header>
     <main>
       <section id="welcome">
@@ -25,16 +24,17 @@
         </p>
         <p>Get a question wrong and lose 10 seconds of precious time...</p>
         <p>You have 1 whole minute. GOOD LUCK! 🍀</p>
-        <button id="start-quiz">Let's Go!!!</button>
+        <button id="start-quiz" class="btn">Let's Go!!!</button>
+        <button class="btn">View HighScores</a>
       </section>
-      <section id="quiz">
+      <section id="quiz" class="container">
         <article id="question">
           <h2 id="question-title"></h2>
           <div id="answer-wrapper">
-            <input id="choice-one" type="button" />
-            <input id="choice-two" type="button" />
-            <input id="choice-three" type="button" />
-            <input id="choice-four" type="button" />
+            <input id="choice-one" class="btn" type="button" />
+            <input id="choice-two" class="btn" type="button" />
+            <input id="choice-three" class="btn" type="button" />
+            <input id="choice-four" class="btn" type="button" />
           </div>
         </article>
       </section>
